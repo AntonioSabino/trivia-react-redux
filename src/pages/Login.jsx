@@ -13,7 +13,6 @@ class Login extends Component {
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
-    console.log(value.length);
   }
 
   handleClick = () => {
@@ -22,26 +21,35 @@ class Login extends Component {
 
   render() {
     const { loginEmail, loginName } = this.state;
+    /**
+      * Validação com Regex consultada em
+      * https://pt.stackoverflow.com/questions/1386/express%C3%A3o-regular-para-valida%C3%A7%C3%A3o-de-e-mail
+    */
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i;
     const validateEmail = emailRegex.test(loginEmail);
     return (
       <form>
         Email do Gravatar:
-        <input
-          type="email"
-          name="loginEmail"
-          id="loginEmail"
-          data-testid="input-gravatar-email"
-          onChange={ this.handleChange }
-        />
-        Nome do Jogador:
-        <input
-          type="text"
-          name="loginName"
-          id="loginName"
-          data-testid="input-player-name"
-          onChange={ this.handleChange }
-        />
+        <label htmlFor="loginEmail">
+          Email do Gravatar
+          <input
+            type="email"
+            name="loginEmail"
+            id="loginEmail"
+            data-testid="input-gravatar-email"
+            onChange={ this.handleChange }
+          />
+        </label>
+        <label htmlFor="loginName">
+          Nome do Jogador:
+          <input
+            type="text"
+            name="loginName"
+            id="loginName"
+            data-testid="input-player-name"
+            onChange={ this.handleChange }
+          />
+        </label>
         <button
           type="button"
           data-testid="btn-play"
