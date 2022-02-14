@@ -19,7 +19,7 @@ class Login extends Component {
   }
 
   handleClick = async () => {
-    const { getLogin, getToken } = this.props;
+    const { getLogin, getToken, history } = this.props;
     const token = await getToken();
     const { loginEmail, loginName } = this.state;
     const user = {
@@ -30,6 +30,7 @@ class Login extends Component {
     };
     getLogin(user);
     localStorage.setItem('token', token);
+    // history.push('/game');
   }
 
   handleConfigClick = () => {
