@@ -22,10 +22,10 @@ class Login extends Component {
     const { getLogin } = this.props;
     const { loginEmail, loginName } = this.state;
     const user = {
-      loginName,
+      name: loginName,
       assertions: 0,
       score: 0,
-      loginEmail,
+      gravatarEmail: loginEmail,
     };
     getLogin(user);
   }
