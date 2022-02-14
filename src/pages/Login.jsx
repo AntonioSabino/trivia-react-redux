@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getUser } from '../redux/actions/index';
 
 class Login extends Component {
   constructor() {
@@ -14,6 +16,18 @@ class Login extends Component {
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
+  }
+
+  handleClick = () => {
+    const { getLogin } = this.props;
+    const { loginEmail, loginName } = this.state;
+    const user = {
+      loginName,
+      assertions: 0,
+      score: 0,
+      loginEmail,
+    };
+    getLogin(user);
   }
 
   handleConfigClick = () => {
@@ -72,7 +86,14 @@ class Login extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  getLogin: (user) => dispatch(getUser(user)),
+});
+
 Login.propTypes = {
+  getUser: PropTypes.func,
   history: PropTypes.objectOf(PropTypes.any),
 }.isRequired;
-export default Login;
+
+export default connect(null, mapDispatchToProps)(Login);

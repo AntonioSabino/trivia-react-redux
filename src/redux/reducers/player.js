@@ -1,4 +1,4 @@
-import USER_LOGIN from '../actions/actionTypes';
+const USER_LOGIN = 'USER_LOGIN';
 
 const INITIAL_STATE = {
   player: {
@@ -9,10 +9,14 @@ const INITIAL_STATE = {
   },
 };
 
-const user = (state = INITIAL_STATE, { type }) => {
+const user = (state = INITIAL_STATE, { type, payload }) => {
   switch (type) {
   case USER_LOGIN:
-    return state;
+    return {
+      ...state,
+      player: payload,
+    };
+
   default:
     return state;
   }
