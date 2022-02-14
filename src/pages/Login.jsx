@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getUser } from '../redux/actions/index';
+import { getUser, tokenAPI } from '../redux/actions/index';
 
 class Login extends Component {
   constructor() {
@@ -18,8 +18,9 @@ class Login extends Component {
     this.setState({ [name]: value });
   }
 
-  handleClick = () => {
-    const { getLogin } = this.props;
+  handleClick = async () => {
+    const { getLogin, getToken, history } = this.props;
+    const token = await getToken();
     const { loginEmail, loginName } = this.state;
     const user = {
       name: loginName,
@@ -28,6 +29,8 @@ class Login extends Component {
       gravatarEmail: loginEmail,
     };
     getLogin(user);
+    localStorage.setItem('token', token);
+    // history.push('/game');
   }
 
   handleConfigClick = () => {
@@ -93,10 +96,12 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getLogin: (user) => dispatch(getUser(user)),
+  getToken: () => dispatch(tokenAPI()),
 });
 
 Login.propTypes = {
   getUser: PropTypes.func,
+  getToken: PropTypes.func,
   history: PropTypes.objectOf(PropTypes.any),
 }.isRequired;
 
