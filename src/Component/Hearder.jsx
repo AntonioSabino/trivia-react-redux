@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import md5 from 'crypto-js/md5';
+import { connect } from 'react-redux';
 
 class Header extends Component {
   constructor() {
@@ -45,4 +46,4 @@ const mapStateToProps = (state) => ({
   get: state.nomeDoReducer.dados,
 });
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, null)(Header);
