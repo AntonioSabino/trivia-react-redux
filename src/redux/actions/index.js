@@ -1,3 +1,5 @@
+import fetchToken from '../../services/fetchToken';
+
 import {
   USER_LOGIN,
   GET_TOKEN,
@@ -8,7 +10,13 @@ export const getUser = (user) => ({
   payload: user,
 });
 
-export const getToken = (payload) => ({
+const getToken = (token) => ({
   type: GET_TOKEN,
-  payload,
+  payload: token,
 });
+
+export const tokenAPI = () => async (dispatch) => {
+  const data = await fetchToken();
+  dispatch(getToken(data.token));
+  return data.token;
+};

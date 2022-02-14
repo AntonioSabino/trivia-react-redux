@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getUser } from '../redux/actions/index';
+import { getUser, tokenAPI } from '../redux/actions/index';
 
 class Login extends Component {
   constructor() {
@@ -18,8 +18,9 @@ class Login extends Component {
     this.setState({ [name]: value });
   }
 
-  handleClick = () => {
-    const { getLogin } = this.props;
+  handleClick = async () => {
+    const { getLogin, getToken, history } = this.props;
+    const token = await getToken();
     const { loginEmail, loginName } = this.state;
     const user = {
       name: loginName,
@@ -28,6 +29,8 @@ class Login extends Component {
       gravatarEmail: loginEmail,
     };
     getLogin(user);
+    localStorage.setItem('token', token);
+    // history.push('/game');
   }
 
   handleConfigClick = () => {
@@ -44,21 +47,23 @@ class Login extends Component {
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)?$/i;
     const validateEmail = emailRegex.test(loginEmail);
     return (
-      <form>
-        Email do Gravatar:
-        <label htmlFor="loginEmail">
+      <form className="form-login">
+        <label className="label" htmlFor="loginEmail">
           Email do Gravatar
           <input
+            className="label__input"
             type="email"
             name="loginEmail"
             id="loginEmail"
             data-testid="input-gravatar-email"
             onChange={ this.handleChange }
+            placeholder="user@example.com"
           />
         </label>
-        <label htmlFor="loginName">
+        <label className="label" htmlFor="loginName">
           Nome do Jogador:
           <input
+            className="label__input"
             type="text"
             name="loginName"
             id="loginName"
@@ -67,6 +72,7 @@ class Login extends Component {
           />
         </label>
         <button
+          className="form-login__button"
           type="button"
           data-testid="btn-play"
           disabled={ !validateEmail || !loginName.length }
@@ -75,6 +81,7 @@ class Login extends Component {
           Jogar
         </button>
         <button
+          className="form-login__button-settings"
           type="button"
           data-testid="btn-settings"
           onClick={ this.handleConfigClick }
@@ -89,10 +96,12 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getLogin: (user) => dispatch(getUser(user)),
+  getToken: () => dispatch(tokenAPI()),
 });
 
 Login.propTypes = {
   getUser: PropTypes.func,
+  getToken: PropTypes.func,
   history: PropTypes.objectOf(PropTypes.any),
 }.isRequired;
 

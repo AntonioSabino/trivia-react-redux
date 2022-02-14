@@ -9,15 +9,12 @@ import Game from './pages/Game';
 export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={ logo } className="App-logo" alt="logo" />
-
-        <Switch>
-          <Route exact path="/" component={ LOGIN } />
-          <Route exact path="/settings" component={ Config } />
-          <Route exact path="/game" component={ Game } />
-        </Switch>
-      </header>
+      <img src={ logo } className="App__logo" alt="logo" />
+      <Switch>
+        <Route exact path="/" component={ LOGIN } />
+        <Route exact path="/settings" component={ Config } />
+        <Route exact path="/game" component={ Game } />
+      </Switch>
     </div>
   );
 }
