@@ -30,7 +30,7 @@ class Login extends Component {
     };
     getLogin(user);
     localStorage.setItem('token', token);
-    // history.push('/game');
+    history.push('/game');
   }
 
   handleConfigClick = () => {
