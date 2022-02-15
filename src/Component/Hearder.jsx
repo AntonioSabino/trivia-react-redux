@@ -19,25 +19,36 @@ class Header extends Component {
     const criptoEmail = md5(gravatarEmail).toString();
     const srcImg = `https://www.gravatar.com/avatar/${criptoEmail}`;
     return (
-      <section>
-        <img
-          src={ srcImg }
-          alt="avatar"
-          data-testid="header-profile-picture"
-        />
+      <header className="header">
+        <div className="player-container">
+          <img
+            src={ srcImg }
+            alt="avatar"
+            data-testid="header-profile-picture"
+            className="player-container__user-image"
+          />
 
-        <h2
-          data-testid="header-player-name"
-        >
-          {name}
-        </h2>
+          <h2
+            data-testid="header-player-name"
+            className="player-container__username"
+          >
+            {name}
+          </h2>
+        </div>
 
-        <p
-          data-testid="header-score"
-        >
-          {score}
-        </p>
-      </section>
+        <div className="score-content">
+          <span className="material-icons-outlined score-content__icon-score">
+            emoji_events
+          </span>
+
+          <p
+            data-testid="header-score"
+            className="score-content__score"
+          >
+            {score}
+          </p>
+        </div>
+      </header>
 
     );
   }
