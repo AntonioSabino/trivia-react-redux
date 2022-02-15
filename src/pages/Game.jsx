@@ -6,11 +6,6 @@ class Game extends Component {
     return (
       <div>
         <Header />
-        <input
-          data-testid="btn-go-home"
-          type="button"
-          value="Tela inicial"
-        />
       </div>
     );
   }
