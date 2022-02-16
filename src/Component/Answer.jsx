@@ -10,6 +10,7 @@ class Answer extends Component {
     super();
 
     this.state = {
+      confirmAnswers: false,
       questions: [],
       questNumber: 0,
       randomQuestions: [],
@@ -37,7 +38,9 @@ class Answer extends Component {
       this.redirectEndGame();
     } else {
       this.setState((prevState) => (
-        { questNumber: prevState.questNumber + 1 }
+        { questNumber: prevState.questNumber + 1,
+          confirmAnswers: false,
+        }
       ));
     }
   }
@@ -53,6 +56,12 @@ class Answer extends Component {
       newQuestions.push(entries);
     }
     this.setState({ randomQuestions: newQuestions });
+  }
+
+  answerClick = () => {
+    this.setState({
+      confirmAnswers: true,
+    });
   }
 
   async fetchQuestions() {
@@ -75,6 +84,7 @@ class Answer extends Component {
       questNumber,
       randomQuestions,
       buttonDisables,
+      confirmAnswers,
     } = this.state;
     const index = 0;
     console.log(questions);
@@ -87,13 +97,19 @@ class Answer extends Component {
           <>
             <h3 data-testid="question-category">{questions[questNumber].category}</h3>
             <h3 data-testid="question-text">{questions[questNumber].question}</h3>
-            <section data-testid="answer-options">
+            <section id="answer-options-card" data-testid="answer-options">
               {
                 randomQuestions[questNumber]
                   .map((answer) => (
                     <button
+                      className={ confirmAnswers && (
+                        answer[0] === 'correctAnswers'
+                          ? 'answer-options-card__correctAnswers'
+                          : 'answer-options-card__wrong-answer'
+                      ) }
                       type="button"
                       key={ answer }
+                      onClick={ this.answerClick }
                       data-testid={ answer[0] === 'correctAnswers'
                         ? 'correct-answer'
                         : `wrong-answer-${index}` }
@@ -105,12 +121,15 @@ class Answer extends Component {
             </section>
           </>
         )}
-        <button
-          type="button"
-          onClick={ this.nextClick }
-        >
-          Próxima
-        </button>
+        {confirmAnswers && (
+          <button
+            type="button"
+            onClick={ this.nextClick }
+            data-testid="btn-next"
+          >
+            Próxima
+          </button>
+        )}
       </div>
     );
   }
