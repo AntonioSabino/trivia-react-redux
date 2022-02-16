@@ -49,6 +49,12 @@ class Answer extends Component {
     this.setState({ randomQuestions: newQuestions });
   }
 
+  selectedAnswer = () => {
+    const parentNode = document.querySelector('.answer-options-card');
+
+    parentNode.classList.add('marked-answer');
+  }
+
   async fetchQuestions() {
     const VALIDATE_CODE = 3;
     const { token, getToken } = this.props;
@@ -73,16 +79,22 @@ class Answer extends Component {
           <>
             <h3 data-testid="question-category">{questions[questNumber].category}</h3>
             <h3 data-testid="question-text">{questions[questNumber].question}</h3>
-            <section data-testid="answer-options">
+            <section className="answer-options-card" data-testid="answer-options">
               {
                 randomQuestions[questNumber]
                   .map((answer) => (
                     <button
+                      className={
+                        answer[0] === 'correctAnswers'
+                          ? 'answer-options-card__correctAnswers'
+                          : 'answer-options-card__wrong-answer'
+                      }
                       type="button"
                       key={ answer }
                       data-testid={ answer[0] === 'correctAnswers'
                         ? 'correct-answer'
                         : `wrong-answer-${index}` }
+                      onClick={ this.selectedAnswer }
                     >
                       {answer[1]}
                     </button>))

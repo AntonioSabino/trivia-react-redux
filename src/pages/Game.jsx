@@ -18,7 +18,7 @@ class Game extends Component {
         />
         <Answer history={ history } />
         <img src={ logo } className="App__logo" alt="logo" />
-        <FeedBack />
+        {/* <FeedBack /> */}
       </>
     );
   }

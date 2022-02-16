@@ -181,3 +181,11 @@ body {
 .button_green:hover {
   background-color: #7f5af0;
 }
+
+section.marked-answer .answer-options-card__correctAnswers {
+  border: 3px solid rgb(6, 240, 15)
+}
+
+section.marked-answer .answer-options-card__wrong-answer {
+  border: 3px solid rgb(255, 0, 0);
+}
