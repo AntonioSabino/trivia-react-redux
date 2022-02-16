@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import fetchTrivia from '../services/fetchTrivia';
 import { tokenAPI } from '../redux/actions/index';
+import Timer from './Timer';
 
 class Answer extends Component {
   constructor() {
@@ -13,11 +14,16 @@ class Answer extends Component {
       questions: [],
       questNumber: 0,
       randomQuestions: [],
+      buttonDisables: false,
     };
   }
 
   componentDidMount() {
     this.fetchQuestions();
+  }
+
+  disabledButtons = () => {
+    this.setState({ buttonDisables: true });
   }
 
   redirectEndGame = () => {
@@ -73,11 +79,20 @@ class Answer extends Component {
   }
 
   render() {
-    const { questions, questNumber, randomQuestions, confirmAnswers } = this.state;
+    const {
+      questions,
+      questNumber,
+      randomQuestions,
+      buttonDisables,
+      confirmAnswers,
+    } = this.state;
     const index = 0;
     console.log(questions);
     return (
       <div>
+        <Timer
+          disabledButtons={ this.disabledButtons }
+        />
         {questions.length > 0 && (
           <>
             <h3 data-testid="question-category">{questions[questNumber].category}</h3>
@@ -98,7 +113,7 @@ class Answer extends Component {
                       data-testid={ answer[0] === 'correctAnswers'
                         ? 'correct-answer'
                         : `wrong-answer-${index}` }
-
+                      disabled={ buttonDisables }
                     >
                       {answer[1]}
                     </button>))
