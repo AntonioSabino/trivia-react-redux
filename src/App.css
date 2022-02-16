@@ -45,6 +45,7 @@ body {
   }
 }
 
+/* TELA DE LOGIN */
 .form-login {
   display: flex;
   flex-direction: column;
@@ -87,4 +88,52 @@ body {
   height: 2.5rem;
   margin-top: 0.5rem;
   width: 100%;
+}
+
+/* TELA DO GAME */
+.header {
+  align-items: center;
+  background-color: white;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: row;
+  font-family: sans-serif;
+  height: 5rem;
+  justify-content: space-between;
+  margin-top: 5rem;
+  width: 40rem;
+}
+
+.player-container {
+  align-items: center;
+  display: flex;
+  height: 90%;
+  margin-left: 1rem;
+}
+
+.player-container__user-image {
+  border-radius: 50%;
+  height: 90%;
+}
+
+.player-container__username {
+  font-size: 24px;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.score-content {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.score-content__score {
+  font-size: 22px;
+}
+
+.score-content__icon-score {
+  font-size: 25px;
+  margin-right: 5px;
 }

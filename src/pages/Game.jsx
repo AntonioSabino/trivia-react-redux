@@ -7,11 +7,15 @@ class Game extends Component {
   render() {
     const { history } = this.props;
     return (
-      <section>
+      <div>
         <Header />
+        <input
+          data-testid="btn-go-home"
+          type="button"
+          value="Tela inicial"
+        />
         <Answer history={ history } />
-      </section>
-
+      </div>
     );
   }
 }
