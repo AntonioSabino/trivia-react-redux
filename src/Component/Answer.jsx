@@ -28,7 +28,7 @@ class Answer extends Component {
 
   redirectEndGame = () => {
     const { history } = this.props;
-    history.push('/settings');
+    history.push('/endgame');
   }
 
   nextClick = () => {
