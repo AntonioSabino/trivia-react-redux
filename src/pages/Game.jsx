@@ -17,7 +17,6 @@ class Game extends Component {
           value="Tela inicial"
         />
         <Answer history={ history } />
-      </div>
         <img src={ logo } className="App__logo" alt="logo" />
         <FeedBack />
       </>
