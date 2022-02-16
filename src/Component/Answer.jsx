@@ -82,17 +82,12 @@ class Answer extends Component {
           <>
             <h3 data-testid="question-category">{questions[questNumber].category}</h3>
             <h3 data-testid="question-text">{questions[questNumber].question}</h3>
-            <section data-testid="answer-options">
+            <section id="answer-options-card" data-testid="answer-options">
               {
                 randomQuestions[questNumber]
                   .map((answer) => (
                     <button
-
-                      className={ confirmAnswers ? (
-                        answer[0] === 'correctAnswers'
-                          ? 'answer-options-card__correctAnswers'
-                          : 'answer-options-card__wrong-answer'
-                      ) : (
+                      className={ confirmAnswers && (
                         answer[0] === 'correctAnswers'
                           ? 'answer-options-card__correctAnswers'
                           : 'answer-options-card__wrong-answer'
@@ -103,6 +98,7 @@ class Answer extends Component {
                       data-testid={ answer[0] === 'correctAnswers'
                         ? 'correct-answer'
                         : `wrong-answer-${index}` }
+
                     >
                       {answer[1]}
                     </button>))

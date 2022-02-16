@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Answer from '../Component/Answer';
-import FeedBack from '../Component/FeedBack';
+// import FeedBack from '../Component/FeedBack';
 import Header from '../Component/Hearder';
 import logo from '../trivia.png';
 
@@ -18,7 +18,7 @@ class Game extends Component {
         />
         <Answer history={ history } />
         <img src={ logo } className="App__logo" alt="logo" />
-        <FeedBack />
+        {/* <FeedBack /> */}
       </>
     );
   }
