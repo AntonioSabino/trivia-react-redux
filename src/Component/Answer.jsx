@@ -11,13 +11,12 @@ class Answer extends Component {
     this.state = {
       questions: [],
       questNumber: 0,
-      responseCode: 0,
+      randomQuestions: [],
     };
   }
 
   componentDidMount() {
     this.fetchQuestions();
-    this.notToken();
   }
 
   redirectEndGame = () => {
@@ -37,28 +36,37 @@ class Answer extends Component {
     }
   }
 
-  async notToken() {
-    const VALIDATE_CODE = 3;
-    const { getToken } = this.props;
-    const { responseCode } = this.state;
-    if (responseCode === VALIDATE_CODE) {
-      const token = await getToken();
-      localStorage.setItem('token', token);
+  sortQuestion = ({ results }) => {
+    const NUMBER = 0.5;
+    const newQuestions = [];
+    for (let index = 0; index < results.length; index += 1) {
+      const correctAnswers = results[index].correct_answer;
+      const obj = { ...results[index].incorrect_answers, correctAnswers };
+      const entries = Object.entries(obj);
+      entries.sort(() => Math.random() - NUMBER);
+      newQuestions.push(entries);
     }
+    this.setState({ randomQuestions: newQuestions });
   }
 
   async fetchQuestions() {
-    const resolve = await fetchTrivia();
+    const VALIDATE_CODE = 3;
+    const { token, getToken } = this.props;
+    const resolve = await fetchTrivia(token);
+    if (resolve.response_code === VALIDATE_CODE) {
+      const newToken = await getToken();
+      localStorage.setItem('token', newToken);
+      this.fetchQuestions();
+    }
     this.setState({
       questions: resolve.results,
-      responseCode: resolve.response_code,
-    });
+    }, this.sortQuestion(resolve));
   }
 
   render() {
-    const { questions, questNumber } = this.state;
+    const { questions, questNumber, randomQuestions } = this.state;
     const index = 0;
-    console.log(questions[0]);
+    console.log(questions);
     return (
       <div>
         {questions.length > 0 && (
@@ -66,18 +74,17 @@ class Answer extends Component {
             <h3 data-testid="question-category">{questions[questNumber].category}</h3>
             <h3 data-testid="question-text">{questions[questNumber].question}</h3>
             <section data-testid="answer-options">
-              <button type="button" data-testid="correct-answer">
-                {questions[questNumber].correct_answer}
-              </button>
               {
-                questions[questNumber].incorrect_answers
+                randomQuestions[questNumber]
                   .map((answer) => (
                     <button
                       type="button"
                       key={ answer }
-                      data-testid={ `wrong-answer-${index}` }
+                      data-testid={ answer[0] === 'correctAnswers'
+                        ? 'correct-answer'
+                        : `wrong-answer-${index}` }
                     >
-                      {answer}
+                      {answer[1]}
                     </button>))
               }
             </section>
@@ -94,13 +101,18 @@ class Answer extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  token: state.token,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(tokenAPI()),
 });
 
 Answer.propTypes = {
+  token: PropTypes.string,
   getToken: PropTypes.func,
   history: PropTypes.objectOf(PropTypes.any),
 }.isRequired;
 
-export default connect(null, mapDispatchToProps)(Answer);
+export default connect(mapStateToProps, mapDispatchToProps)(Answer);
