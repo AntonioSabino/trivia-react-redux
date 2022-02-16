@@ -36,18 +36,16 @@ class Header extends Component {
           </h2>
         </div>
 
-        <div className="score-content">
-          <span className="material-icons-outlined score-content__icon-score">
-            emoji_events
-          </span>
+        <span className="material-icons-outlined score-content__icon-score">
+          emoji_events
+        </span>
 
-          <p
-            data-testid="header-score"
-            className="score-content__score"
-          >
-            {score}
-          </p>
-        </div>
+        <p
+          data-testid="header-score"
+          className="score-content__score"
+        >
+          {`Total de pontos: ${score}`}
+        </p>
       </header>
 
     );
