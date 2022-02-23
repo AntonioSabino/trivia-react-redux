@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import fetchTrivia from '../services/fetchTrivia';
-import { tokenAPI } from '../redux/actions/index';
+import { tokenAPI, updateScore } from '../redux/actions/index';
 import Timer from './Timer';
 
 class Answer extends Component {
@@ -23,6 +23,7 @@ class Answer extends Component {
   componentDidMount() {
     this.fetchQuestions();
     this.coolDown();
+    localStorage.setItem('score', 0);
   }
 
   /* coolDown feito através da consulta desse link */
@@ -81,13 +82,45 @@ class Answer extends Component {
     this.setState({ randomQuestions: newQuestions });
   }
 
+  defineDificult = (difficulty) => {
+    const NUMBER_ONE = 1;
+    const NUMBER_TWO = 2;
+    const NUMBER_THREE = 3;
+
+    if (difficulty === 'easy') {
+      return (NUMBER_ONE);
+    } if (difficulty === 'medium') {
+      return (NUMBER_TWO);
+    } if (difficulty === 'hard') {
+      return (NUMBER_THREE);
+    }
+  }
+
+  sumScore = (targetAnswer, seconds, difficulty) => {
+    if (targetAnswer.includes('correct')) {
+      const { totalScore, player } = this.props;
+      const MIN_POINTS = 10;
+      const difficultyValue = this.defineDificult(difficulty);
+      const questionScore = player.score + MIN_POINTS + (seconds * difficultyValue);
+      localStorage.setItem('score', questionScore);
+      const newUser = {
+        name: player.name,
+        assertions: player.assertions + 1,
+        score: questionScore,
+        gravatarEmail: player.gravatarEmail,
+      };
+
+      totalScore(newUser);
+    }
+  }
+
   answerClick = ({ target }, questNumber) => {
     const { seconds, questionDificult } = this.state;
     this.setState({
       confirmAnswers: true,
       buttonDisables: true,
     });
-    console.log(target.id, seconds, questionDificult[questNumber]);
+    this.sumScore(target.id, seconds, questionDificult[questNumber]);
   }
 
   callFunctions = (resolve) => {
@@ -103,10 +136,8 @@ class Answer extends Component {
   }
 
   mapDificult = ({ results }) => {
-    const { questionDificult } = this.state;
     const dificults = results.map((question) => question.difficulty);
     this.setState({ questionDificult: dificults });
-    console.log(questionDificult);
   }
 
   async fetchQuestions() {
@@ -185,11 +216,12 @@ class Answer extends Component {
 
 const mapStateToProps = (state) => ({
   token: state.token,
+  player: state.player,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(tokenAPI()),
-
+  totalScore: (score) => dispatch(updateScore(score)),
 });
 
 Answer.propTypes = {

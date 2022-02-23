@@ -23,13 +23,13 @@ class Login extends Component {
     const { getLogin, getToken, history } = this.props;
     const token = await getToken();
     const { loginEmail, loginName } = this.state;
-    const user = {
+    const player = {
       name: loginName,
       assertions: 0,
       score: 0,
       gravatarEmail: loginEmail,
     };
-    getLogin(user);
+    getLogin(player);
     localStorage.setItem('token', token);
     history.push('/game');
   }

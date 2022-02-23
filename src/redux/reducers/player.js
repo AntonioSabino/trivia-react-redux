@@ -1,25 +1,29 @@
 const USER_LOGIN = 'USER_LOGIN';
+const UPDATE_SCORE = 'UPDATE_SCORE';
 
 const INITIAL_STATE = {
-  player: {
-    name: '',
-    assertions: 0,
-    score: 0,
-    gravatarEmail: '',
-  },
+  name: '',
+  assertions: 0,
+  score: 0,
+  gravatarEmail: '',
 };
 
-const user = (state = INITIAL_STATE, { type, payload }) => {
+const player = (state = INITIAL_STATE, { type, payload }) => {
   switch (type) {
   case USER_LOGIN:
     return {
       ...state,
-      player: payload,
+      name: payload.name,
+      gravatarEmail: payload.gravatarEmail,
     };
-
+  case UPDATE_SCORE:
+    return {
+      ...state,
+      score: payload.score,
+    };
   default:
     return state;
   }
 };
 
-export default user;
+export default player;
