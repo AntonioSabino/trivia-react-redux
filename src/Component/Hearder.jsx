@@ -13,6 +13,24 @@ class Header extends Component {
     };
   }
 
+  componentDidMount() {
+    localStorage.setItem('score', 0);
+    this.getOnLocaStorage();
+  }
+
+  getOnLocaStorage = () => {
+    const INITIAL_SCORE = localStorage.getItem('score');
+    if (!INITIAL_SCORE) {
+      this.setState({
+        score: INITIAL_SCORE,
+      });
+    } else {
+      this.setState({
+        score: 0,
+      });
+    }
+  }
+
   render() {
     const { score } = this.state;
     const { gravatarEmail, name } = this.props;

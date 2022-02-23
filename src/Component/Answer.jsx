@@ -15,15 +15,36 @@ class Answer extends Component {
       questNumber: 0,
       randomQuestions: [],
       buttonDisables: false,
+      seconds: 30,
+      questionDificult: [],
     };
   }
 
   componentDidMount() {
     this.fetchQuestions();
+    this.coolDown();
+  }
+
+  /* coolDown feito através da consulta desse link */
+  /* https://stackblitz.com/edit/react-timer-without-state */
+  coolDown = () => {
+    const ONE_SECOND = 1000;
+    setInterval(() => {
+      this.setState((prevState) => ({
+        seconds: prevState.seconds > 0 ? prevState.seconds - 1 : prevState.seconds,
+      }));
+      const { seconds } = this.state;
+      if (seconds === 0) {
+        this.disabledButtons();
+      }
+    }, ONE_SECOND);
   }
 
   disabledButtons = () => {
-    this.setState({ buttonDisables: true });
+    this.setState({
+      buttonDisables: true,
+      confirmAnswers: true,
+    });
   }
 
   redirectEndGame = () => {
@@ -40,6 +61,8 @@ class Answer extends Component {
       this.setState((prevState) => (
         { questNumber: prevState.questNumber + 1,
           confirmAnswers: false,
+          seconds: 30,
+          buttonDisables: false,
         }
       ));
     }
@@ -58,10 +81,32 @@ class Answer extends Component {
     this.setState({ randomQuestions: newQuestions });
   }
 
-  answerClick = () => {
+  answerClick = ({ target }, questNumber) => {
+    const { seconds, questionDificult } = this.state;
     this.setState({
       confirmAnswers: true,
+      buttonDisables: true,
     });
+    console.log(target.id, seconds, questionDificult[questNumber]);
+  }
+
+  callFunctions = (resolve) => {
+    this.sortQuestion(resolve);
+    this.mapDificult(resolve);
+  }
+
+  classNameChange = (answer) => {
+    if (answer[0] === 'correctAnswers') {
+      return ('answer-options-card__correctAnswers');
+    }
+    return ('answer-options-card__wrong-answer');
+  }
+
+  mapDificult = ({ results }) => {
+    const { questionDificult } = this.state;
+    const dificults = results.map((question) => question.difficulty);
+    this.setState({ questionDificult: dificults });
+    console.log(questionDificult);
   }
 
   async fetchQuestions() {
@@ -75,7 +120,7 @@ class Answer extends Component {
     }
     this.setState({
       questions: resolve.results,
-    }, this.sortQuestion(resolve));
+    }, this.callFunctions(resolve));
   }
 
   render() {
@@ -85,13 +130,13 @@ class Answer extends Component {
       randomQuestions,
       buttonDisables,
       confirmAnswers,
+      seconds,
     } = this.state;
     const index = 0;
-    console.log(questions);
     return (
       <div>
         <Timer
-          disabledButtons={ this.disabledButtons }
+          seconds={ seconds }
         />
         {questions.length > 0 && (
           <>
@@ -102,18 +147,21 @@ class Answer extends Component {
                 randomQuestions[questNumber]
                   .map((answer) => (
                     <button
-                      className={ confirmAnswers && (
-                        answer[0] === 'correctAnswers'
-                          ? 'answer-options-card__correctAnswers'
-                          : 'answer-options-card__wrong-answer'
-                      ) }
+                      className={ confirmAnswers ? (
+                        this.classNameChange(answer)
+                      ) : (null) }
                       type="button"
                       key={ answer }
-                      onClick={ this.answerClick }
+                      onClick={ ({ target }) => this.answerClick(
+                        { target }, questNumber,
+                      ) }
                       data-testid={ answer[0] === 'correctAnswers'
                         ? 'correct-answer'
                         : `wrong-answer-${index}` }
                       disabled={ buttonDisables }
+                      id={ answer[0] === 'correctAnswers'
+                        ? 'correct-answer'
+                        : 'wrong-answer' }
                     >
                       {answer[1]}
                     </button>))
@@ -141,6 +189,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(tokenAPI()),
+
 });
 
 Answer.propTypes = {
