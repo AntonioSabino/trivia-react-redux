@@ -3,6 +3,7 @@ import fetchToken from '../../services/fetchToken';
 import {
   USER_LOGIN,
   GET_TOKEN,
+  UPDATE_SCORE,
 } from './actionTypes';
 
 export const getUser = (user) => ({
@@ -20,3 +21,8 @@ export const tokenAPI = () => async (dispatch) => {
   dispatch(getToken(data.token));
   return data.token;
 };
+
+export const updateScore = (score) => ({
+  type: UPDATE_SCORE,
+  payload: score,
+});
