@@ -19,6 +19,7 @@ const player = (state = INITIAL_STATE, { type, payload }) => {
   case UPDATE_SCORE:
     return {
       ...state,
+      assertions: payload.assertions,
       score: payload.score,
     };
   default:
