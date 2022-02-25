@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Header from '../Component/Header';
 
 class Feedback extends Component {
   redirectNewGame = () => {
@@ -13,8 +15,16 @@ class Feedback extends Component {
   }
 
   render() {
+    const { assertions } = this.props;
+    const VALIDATE_SCORE = 3;
+    console.log(assertions);
     return (
       <section>
+        <Header />
+        <h1 data-testid="feedback-text">
+          {' '}
+          {assertions >= VALIDATE_SCORE ? 'Well Done!' : 'Could be better...'}
+        </h1>
         <button
           type="button"
           onClick={ this.redirectRankin }
@@ -34,8 +44,12 @@ class Feedback extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  assertions: state.player.assertions,
+});
+
 Feedback.propTypes = {
   history: PropTypes.objectOf(PropTypes.any),
 }.isRequired;
 
-export default Feedback;
+export default connect(mapStateToProps, null)(Feedback);
