@@ -34,7 +34,7 @@ class Header extends Component {
           data-testid="header-score"
           className="score-content__score"
         >
-          {`Total de pontos: ${score}`}
+          {score}
         </p>
       </header>
 
