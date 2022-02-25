@@ -15,16 +15,17 @@ class Feedback extends Component {
   }
 
   render() {
-    const { assertions } = this.props;
+    const { player } = this.props;
     const VALIDATE_SCORE = 3;
-    console.log(assertions);
     return (
       <section>
         <Header />
         <h1 data-testid="feedback-text">
           {' '}
-          {assertions >= VALIDATE_SCORE ? 'Well Done!' : 'Could be better...'}
+          {player.assertions >= VALIDATE_SCORE ? 'Well Done!' : 'Could be better...'}
         </h1>
+        <p data-testid="feedback-total-score">{player.score}</p>
+        <p data-testid="feedback-total-question">{player.assertions}</p>
         <button
           type="button"
           onClick={ this.redirectRankin }
@@ -45,7 +46,7 @@ class Feedback extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  assertions: state.player.assertions,
+  player: state.player,
 });
 
 Feedback.propTypes = {
